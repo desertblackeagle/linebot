@@ -5,6 +5,10 @@ require 'openssl'
 require 'base64'
 require 'net/http'
 
+get '/' do
+  "Hello"
+end
+
 post '/linebot/callback' do
   channelID = ""
   channelSecret = ""
@@ -14,6 +18,9 @@ post '/linebot/callback' do
     channelSecret = f.gets
     channelMID = f.gets
   end
+  channelID =  channelID.sub("\n","")
+  channelSecret = channelSecret.sub("\n","")
+  channelMID = channelMID.sub("\n","")
   http_request_body = request.body.read # Request body string
   #hash = OpenSSL::HMAC::digest(OpenSSL::Digest::SHA256.new, CHANNEL_SECRET, http_request_body)
   #signature = Base64.strict_encode64(hash)
@@ -33,18 +40,29 @@ post '/linebot/callback' do
   contentpar = {'contentType' => 1,'toType' => 1,'text' => usertext}
   to = [ fromuser ]
   params = {'to' => to, 'toChannel' => 1383378250 , 'eventType' => '138311608800106203', 'content' => contentpar}
-  logger.info params.to_json
-  json_headers = {'Content-type' => 'application/json; charset=UTF-8','User-Agent' => 'LINE-BotSDK/0.1.3' , 'X-Line-ChannelID' => channelID,'X-Line-ChannelSecret' => channelSecret,'X-Line-Trusted-User-With-ACL' => channelMID}
-  logger.info json_headers 
+  json_headers = {'Content-type' => 'application/json; charset=UTF-8', 'X-Line-ChannelID' => channelID,'X-Line-ChannelSecret' => channelSecret,'X-Line-Trusted-User-With-ACL' => channelMID}
  
   uri = URI.parse('https://trialbot-api.line.me/v1/events')
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
-  logger.info uri.path
   response = http.post(uri.path, params.to_json, json_headers)
-  logger.info response.body
+  logger.info "response" + response.body
 
-  exec('python','sendmsg.py', parsed["result"][0]["content"]["text"] )
+  mids = fromuser 
+  uri = URI.parse("https://trialbot-api.line.me")
+  https = Net::HTTP.new(uri.host, uri.port)
+  if uri.scheme == "https"
+    https.use_ssl = true
+  end
+  mids = mids.instance_of?(String) ? [mids] : mids
+  endpoint_path  = "/v1/profiles?mids=#{mids.join(',')}"
+  res = https.get(endpoint_path, json_headers)
+  logger.info "profile : " + res.body
+  parsedprofile = JSON.parse(res.body)
+  userprofilename =  parsedprofile["contacts"][0]["displayName"]
+  logger.info userprofilename
+
+  exec('python','sendmsg.py', "nick name : " + userprofilename + "\ntext : " + parsed["result"][0]["content"]["text"] )
 end
 
 
