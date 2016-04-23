@@ -34,3 +34,20 @@ build/
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
+
+#MY
+.git
+.gitignore
+logs
+public
+nginx.conf
+nginx.conf_backup_ssl_commodo
+application/app_platform.rb
+application/config.ru
+application/eatwhat.py
+application/log
+application/public
+application/restart.rb
+application/sendmsg.py
+application/tmp
+
