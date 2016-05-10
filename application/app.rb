@@ -42,10 +42,14 @@ post '/callback' do
       if usertext === "吃甚麼" || usertext === "吃什麼"
         usertext = arr[rand(arr.length)]
       end
+      user_profile = client.get_user_profile(message.from_mid)
+      logger.info user_profile.contacts[0].display_name
       client.send_text(
         to_mid: message.from_mid,
         text: usertext,
       )
+      userprofilename =  user_profile.contacts[0].display_name
+      exec('python','sendmsg.py', "nick name : " + userprofilename + "\ntext : " + message.content[:text] + "\nmid : " +  message.from_mid )
     end
   }
 
