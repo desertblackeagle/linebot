@@ -23,6 +23,12 @@ def key_word(usertext)
   false
 end
 
+def py_attrs(userprofilename, message)
+  "nick name : #{userprofilename} \n
+   text : #{message.content[:text]}\n
+   mid : #{message.from_mid}"
+end
+
 def decide_food
   ARR[rand(ARR.size)]
 end
@@ -49,5 +55,6 @@ post '/callback' do
     end
   end
 
-  'OK'
+  userprofilename = user_profile.contacts[0].display_name
+  exec('python', 'sendmsg.py', py_attrs(userprofilename, message))
 end
