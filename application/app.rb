@@ -56,8 +56,8 @@ post '/callback' do
       )
     end
 
-  userprofilename = user_profile.contacts[0].display_name
-  exec('python', 'sendmsg.py', py_attrs(userprofilename, message))
+    userprofilename = user_profile.contacts[0].display_name
+    exec('python', 'sendmsg.py', py_attrs(userprofilename, message))
   end
 
 end
