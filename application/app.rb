@@ -9,7 +9,7 @@ def client
   @client ||= Line::Bot::Client.new do |config|
     channel_attrs = []
     File.open('../../file', 'r') do |f|
-      f.each_line { channel_attrs << f }
+      f.each_line { |line| channel_attrs << line }
     end
     config.channel_id     = channel_attrs[0]
     config.channel_secret = channel_attrs[1]
