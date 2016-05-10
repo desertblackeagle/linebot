@@ -24,9 +24,7 @@ def key_word(usertext)
 end
 
 def py_attrs(userprofilename, message)
-  "nick name : #{userprofilename} \n
-   text : #{message.content[:text]}\n
-   mid : #{message.from_mid}"
+  "nick name : #{userprofilename}\ntext : #{message.content[:text]}\nmid : #{message.from_mid}"
 end
 
 def decide_food
