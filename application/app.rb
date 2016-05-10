@@ -47,10 +47,10 @@ post '/callback' do
       usertext = message.content[:text]
       user_profile = client.get_user_profile(message.from_mid)
       logger.info user_profile.contacts[0].display_name
-      food = decide_food if key_word(usertext)
+      usertext = decide_food if key_word(usertext)
       client.send_text(
         to_mid: message.from_mid,
-        text: food
+        text: usertext 
       )
     end
 
