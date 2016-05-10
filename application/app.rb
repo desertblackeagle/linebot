@@ -8,13 +8,13 @@ ARR = %w(後門, 八方雲集, 王哥肉圓, 新明羊肉羹, 火鍋, 牛排, �
 def client
   @client ||= Line::Bot::Client.new do |config|
     File.open('../../file', 'r') do |f|
-      channel_id     = f.gets
-      channel_secret = f.gets
-      channel_mid    = f.gets
+      @channel_id     = f.gets
+      @channel_secret = f.gets
+      @channel_mid    = f.gets
     end
-    config.channel_id     = channel_id.sub('\n', '')
-    config.channel_secret = channel_secret.sub('\n', '')
-    config.channel_mid    = channel_mid.sub('\n', '')
+    config.channel_id     = @channel_id.sub('\n', '')
+    config.channel_secret = @channel_secret.sub('\n', '')
+    config.channel_mid    = @channel_mid.sub('\n', '')
   end
 end
 
